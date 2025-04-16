@@ -44,7 +44,7 @@ const ChatInterface = () => {
   return (
     <div className="flex flex-col h-screen max-w-4xl mx-auto px-4">
       <div className="py-4 flex justify-between items-center border-b">
-        <div className="text-xl font-semibold text-gray-800">
+        <div className="text-xl font-semibold" style={{ color: '#014f95' }}>
           NourNet Gen-AI Agent
         </div>
         <img 
@@ -62,3 +62,4 @@ const ChatInterface = () => {
 };
 
 export default ChatInterface;
+
