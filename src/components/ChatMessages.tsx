@@ -33,7 +33,7 @@ const ChatMessages = ({ messages }: ChatMessagesProps) => {
             className={`max-w-[80%] px-4 py-2 rounded-lg ${
               message.sender === 'user'
                 ? 'bg-primary text-white'
-                : 'bg-secondary text-gray-800'
+                : 'bg-[#403E43] text-white'
             }`}
           >
             <p className="text-sm">{message.content}</p>

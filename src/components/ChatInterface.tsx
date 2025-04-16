@@ -42,7 +42,7 @@ const ChatInterface = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen max-w-4xl mx-auto px-4 bg-[#403E43]">
+    <div className="flex flex-col h-screen max-w-4xl mx-auto px-4 bg-gray-50">
       <div className="py-4 flex justify-center items-center border-b bg-white">
         <img 
           src="/lovable-uploads/5415f8a0-e2ef-4c09-8cf3-1ef94260a533.png" 
@@ -50,7 +50,7 @@ const ChatInterface = () => {
           className="h-12 object-contain"
         />
       </div>
-      <div className="flex-1 overflow-hidden bg-[#403E43] rounded-t-lg shadow-sm">
+      <div className="flex-1 overflow-hidden bg-gray-50 rounded-t-lg shadow-sm">
         <ChatMessages messages={messages} />
       </div>
       <MessageInput onSendMessage={handleSendMessage} />
