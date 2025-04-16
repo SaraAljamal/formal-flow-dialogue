@@ -43,7 +43,10 @@ const ChatInterface = () => {
 
   return (
     <div className="flex flex-col h-screen max-w-4xl mx-auto px-4">
-      <div className="py-4 flex justify-center items-center border-b">
+      <div className="py-4 flex justify-between items-center border-b">
+        <div className="text-xl font-semibold text-gray-800">
+          NourNet Gen-AI Agent
+        </div>
         <img 
           src="/lovable-uploads/5415f8a0-e2ef-4c09-8cf3-1ef94260a533.png" 
           alt="Nournet Logo" 
