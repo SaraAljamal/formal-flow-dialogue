@@ -46,8 +46,9 @@ const ChatInterface = () => {
       };
       setMessages((prev) => [...prev, loadingMessage]);
       
-      // Replace this URL with your Llama model API endpoint on your VM
-      const response = await fetch('http://your-vm-ip:port/api/chat', {
+      // Local endpoint for your Llama model running on the same VM
+      // Adjust the URL to match your local Llama API setup
+      const response = await fetch('http://localhost:8000/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -96,7 +97,7 @@ const ChatInterface = () => {
       
       toast({
         title: "Connection Error",
-        description: "Failed to connect to the Llama model. Please check your VM connection.",
+        description: "Failed to connect to the Llama model. Please check your local server connection.",
         variant: "destructive",
       });
     } finally {
@@ -107,14 +108,14 @@ const ChatInterface = () => {
   return (
     <div className="flex flex-col h-screen max-w-4xl mx-auto px-4">
       <div className="py-4 flex justify-between items-center border-b">
+        <div className="text-xl font-semibold" style={{ color: '#014f95' }}>
+          NourNet Gen-AI Agent
+        </div>
         <img 
           src="/lovable-uploads/5415f8a0-e2ef-4c09-8cf3-1ef94260a533.png" 
           alt="Nournet Logo" 
           className="h-12 object-contain"
         />
-        <div className="text-xl font-semibold" style={{ color: '#014f95' }}>
-          NourNet Gen-AI Agent
-        </div>
       </div>
       <div className="flex-1 overflow-hidden bg-white rounded-t-lg shadow-sm">
         <ChatMessages messages={messages} />
