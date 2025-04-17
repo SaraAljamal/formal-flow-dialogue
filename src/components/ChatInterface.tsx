@@ -3,8 +3,10 @@ import React, { useState } from 'react';
 import ChatMessages from './ChatMessages';
 import MessageInput from './MessageInput';
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { useToast } from "@/hooks/use-toast";
 
 const ChatInterface = () => {
+  const { toast } = useToast();
   const [messages, setMessages] = useState<Array<{
     id: number;
     content: string;
@@ -18,8 +20,10 @@ const ChatInterface = () => {
       timestamp: new Date(),
     },
   ]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSendMessage = (content: string) => {
+  const handleSendMessage = async (content: string) => {
+    // Add user message to the chat
     const newMessage = {
       id: messages.length + 1,
       content,
@@ -29,16 +33,75 @@ const ChatInterface = () => {
     
     setMessages((prev) => [...prev, newMessage]);
     
-    // Simulate AI response
-    setTimeout(() => {
-      const aiResponse = {
+    // Show loading state
+    setIsLoading(true);
+    
+    try {
+      // Add a temporary loading message
+      const loadingMessage = {
         id: messages.length + 2,
-        content: "I'm processing your message...",
+        content: "Processing your request...",
         sender: 'ai' as const,
         timestamp: new Date(),
       };
+      setMessages((prev) => [...prev, loadingMessage]);
+      
+      // Replace this URL with your Llama model API endpoint on your VM
+      const response = await fetch('http://your-vm-ip:port/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: content,
+          // Include any other parameters your Llama API requires
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to connect to the Llama model');
+      }
+      
+      const data = await response.json();
+      
+      // Remove the loading message
+      setMessages((prev) => prev.filter(msg => msg.id !== loadingMessage.id));
+      
+      // Add the actual response
+      const aiResponse = {
+        id: messages.length + 3,
+        content: data.response || "Sorry, I couldn't process that request.",
+        sender: 'ai' as const,
+        timestamp: new Date(),
+      };
+      
       setMessages((prev) => [...prev, aiResponse]);
-    }, 1000);
+    } catch (error) {
+      console.error('Error connecting to Llama model:', error);
+      
+      // Remove the loading message
+      setMessages((prev) => 
+        prev.filter(msg => msg.content !== "Processing your request...")
+      );
+      
+      // Add error message
+      const errorMessage = {
+        id: messages.length + 3,
+        content: "Sorry, I couldn't connect to the AI service. Please try again later.",
+        sender: 'ai' as const,
+        timestamp: new Date(),
+      };
+      
+      setMessages((prev) => [...prev, errorMessage]);
+      
+      toast({
+        title: "Connection Error",
+        description: "Failed to connect to the Llama model. Please check your VM connection.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -56,10 +119,9 @@ const ChatInterface = () => {
       <div className="flex-1 overflow-hidden bg-white rounded-t-lg shadow-sm">
         <ChatMessages messages={messages} />
       </div>
-      <MessageInput onSendMessage={handleSendMessage} />
+      <MessageInput onSendMessage={handleSendMessage} isLoading={isLoading} />
     </div>
   );
 };
 
 export default ChatInterface;
-

@@ -1,18 +1,19 @@
 
 import React, { useState } from 'react';
-import { Send } from 'lucide-react';
+import { Send, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface MessageInputProps {
   onSendMessage: (message: string) => void;
+  isLoading?: boolean;
 }
 
-const MessageInput = ({ onSendMessage }: MessageInputProps) => {
+const MessageInput = ({ onSendMessage, isLoading = false }: MessageInputProps) => {
   const [message, setMessage] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (message.trim()) {
+    if (message.trim() && !isLoading) {
       onSendMessage(message);
       setMessage('');
     }
@@ -26,14 +27,19 @@ const MessageInput = ({ onSendMessage }: MessageInputProps) => {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Type your message..."
+          disabled={isLoading}
           className="flex-1 px-4 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
         />
         <Button 
           type="submit" 
-          disabled={!message.trim()}
+          disabled={!message.trim() || isLoading}
           className="px-4 py-2"
         >
-          <Send className="w-4 h-4" />
+          {isLoading ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <Send className="w-4 h-4" />
+          )}
         </Button>
       </div>
     </form>
